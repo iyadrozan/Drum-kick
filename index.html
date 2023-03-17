@@ -57,25 +57,57 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      function playSound(e) {
-        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-        if (!audio) return; // stop the function from running all together
+      // function playSound(e) {
+      //   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      //   const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      //   if (!audio) return; // stop the function from running all together
+      //   audio.currentTime = 0;
+      //   audio.play();
+      //   key.classList.add("playing");
+      // }
+
+      // function removeTransition(e) {
+      //   if (e.propertyName !== "transform") return;
+      //   this.classList.remove("playing");
+      // }
+
+      // const keys = document.querySelectorAll(".key");
+      // keys.forEach((key) =>
+      //   key.addEventListener("transitionend", removeTransition)
+      // );
+      // window.addEventListener("keydown", playSound);
+      const favicon = document.querySelector('link[rel="icon"]');
+      const defaultFavicon = favicon.getAttribute("href");
+      const playSound = ({ keyCode }) => {
+        const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${keyCode}"]`);
+        if (!audio) return;
         audio.currentTime = 0;
         audio.play();
         key.classList.add("playing");
-      }
+      };
 
-      function removeTransition(e) {
-        if (e.propertyName !== "transform") return;
-        this.classList.remove("playing");
-      }
+      const removeTransition = ({ propertyName, target }) => {
+        if (propertyName !== "transform") return;
+        target.classList.remove("playing");
+      };
 
-      const keys = document.querySelectorAll(".key");
+      const keys = Array.from(document.querySelectorAll(".key"));
       keys.forEach((key) =>
         key.addEventListener("transitionend", removeTransition)
       );
+
+      function changeIcon() {
+        favicon.href = "https://fav.farm/💩";
+      }
+
+      function defaultIcon() {
+        favicon.href = defaultFavicon;
+      }
+
       window.addEventListener("keydown", playSound);
+      window.addEventListener("blur", changeIcon);
+      window.addEventListener("focus", defaultIcon);
     </script>
   </body>
 </html>
